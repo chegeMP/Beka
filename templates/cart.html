@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - Sweet Delights{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="display-4 mb-4" style="color: var(--primary-color);">Your Cart</h1>
+
+    {% if cart_items %}
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ item.pastry.image_url or 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1089&q=80' }}" 
+                                         class="rounded me-3" style="width: 80px; height: 80px; object-fit: cover;" alt="{{ item.pastry.name }}">
+                                    <div>
+                                        <h6 class="mb-1">{{ item.pastry.name }}</h6>
+                                        <small class="text-muted">{{ item.pastry.category }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle">${{ "%.2f"|format(item.pastry.price) }}</td>
+                            <td class="align-middle">
+                                <form method="POST" action="/update_cart" class="d-inline">
+                                    <input type="hidden" name="pastry_id" value="{{ item.pastry.id }}">
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="20" 
+                                           class="form-control" style="width: 80px;" onchange="this.form.submit()">
+                                </form>
+                            </td>
+                            <td class="align-middle">
+                                <strong>${{ "%.2f"|format(item.item_total) }}</strong>
+                            </td>
+                            <td class="align-middle">
+                                <a href="/remove_from_cart/{{ item.pastry.id }}" class="btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="checkout-summary">
+                <h4 class="mb-4" style="color: var(--primary-color);">Order Summary</h4>
+                
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Subtotal:</span>
+                    <span>${{ "%.2f"|format(total) }}</span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Delivery Fee:</span>
+                    <span>$5.99</span>
+                </div>
+                
+                <hr>
+                
+                <div class="d-flex justify-content-between mb-4">
+                    <strong>Total:</strong>
+                    <strong class="price">${{ "%.2f"|format(total + 5.99) }}</strong>
+                </div>
+                
+                <a href="/checkout" class="btn btn-primary btn-lg w-100 mb-3">
+                    <i class="fas fa-credit-card"></i> Proceed to Checkout
+                </a>
+                
+                <a href="/browse" class="btn btn-secondary w-100">
+                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-shopping-cart fa-3x mb-3 text-muted"></i>
+        <h3 class="text-muted">Your cart is empty</h3>
+        <p class="text-muted mb-4">Add some delicious pastries to get started!</p>
+        <a href="/browse" class="btn btn-primary btn-lg">Start Shopping</a>
+    </div>
+    {% endif %}
+</div>
+
+{% block scripts %}
+<script>
+    // Auto-update cart when quantity changes
+    document.querySelectorAll('input[name="quantity"]').forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.value == 0) {
+                if (confirm('Remove this item from your cart?')) {
+                    this.form.submit();
+                } else {
+                    this.value = 1;
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

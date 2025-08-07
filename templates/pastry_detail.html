@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}{{ pastry.name }} - Sweet Delights{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/browse">Browse</a></li>
+            <li class="breadcrumb-item active">{{ pastry.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ pastry.image_url or 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1089&q=80' }}" class="img-fluid rounded shadow" alt="{{ pastry.name }}">
+        </div>
+        <div class="col-md-6">
+            <div class="ps-md-4">
+                <h1 class="display-5 mb-3" style="color: var(--primary-color);">{{ pastry.name }}</h1>
+                
+                {% if pastry.category %}
+                <span class="badge bg-secondary mb-3">{{ pastry.category }}</span>
+                {% endif %}
+                
+                <p class="lead mb-4">{{ pastry.description }}</p>
+                
+                <div class="mb-4">
+                    <span class="display-6 price">${{ "%.2f"|format(pastry.price) }}</span>
+                </div>
+
+                <form method="POST" action="/add_to_cart" class="mb-4">
+                    <input type="hidden" name="pastry_id" value="{{ pastry.id }}">
+                    
+                    <div class="row align-items-end">
+                        <div class="col-4">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="20" class="form-control">
+                        </div>
+                        <div class="col-8">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="border-top pt-4">
+                    <h5>Product Details</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success"></i> Made fresh daily</li>
+                        <li><i class="fas fa-check text-success"></i> Premium ingredients</li>
+                        <li><i class="fas fa-check text-success"></i> Available for next-day delivery</li>
+                        <li><i class="fas fa-check text-success"></i> Allergen information available upon request</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    <div class="mt-5">
+        <h3 class="mb-4" style="color: var(--primary-color);">You might also like</h3>
+        <div class="row">
+            <!-- This would be populated with related pastries in a real app -->
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3" class="card-img-top" alt="Related pastry">
+                    <div class="card-body">
+                        <h6 class="card-title">Similar Pastry</h6>
+                        <p class="price">$3.99</p>
+                    </div>
+                </div>
+            </div>
+            <!-- More related products would go here -->
+        </div>
+    </div>
+</div>
+{% endblock %}

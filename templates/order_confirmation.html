@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmation - Sweet Delights{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+                <h1 class="display-4" style="color: var(--primary-color);">Order Confirmed!</h1>
+                <p class="lead">Thank you for your order. We're preparing your delicious pastries!</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-receipt"></i> Order Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <strong>Order Number:</strong><br>
+                            <span class="text-muted">{{ order.order_number }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Order Date:</strong><br>
+                            <span class="text-muted">{{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <strong>Customer:</strong><br>
+                            <span class="text-muted">{{ order.customer.name }}</span><br>
+                            <span class="text-muted">{{ order.customer.email }}</span>
+                            {% if order.customer.phone %}
+                            <br><span class="text-muted">{{ order.customer.phone }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Delivery Date:</strong><br>
+                            <span class="text-muted">{{ order.delivery_date.strftime('%A, %B %d, %Y') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <strong>Delivery Address:</strong><br>
+                        <span class="text-muted">
+                            {{ order.delivery_address }}<br>
+                            {{ order.delivery_city }}
+                            {% if order.delivery_postal_code %}, {{ order.delivery_postal_code }}{% endif %}
+                        </span>
+                    </div>
+
+                    {% if order.special_instructions %}
+                    <div class="mb-4">
+                        <strong>Special Instructions:</strong><br>
+                        <span class="text-muted">{{ order.special_instructions }}</span>
+                    </div>
+                    {% endif %}
+
+                    <hr>
+
+                    <h5 class="mb-3">Items Ordered</h5>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items %}
+                                <tr>
+                                    <td>{{ item.pastry.name }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>${{ "%.2f"|format(item.unit_price) }}</td>
+                                    <td>${{ "%.2f"|format(item.unit_price * item.quantity) }}</td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="3"><strong>Subtotal:</strong></td>
+                                    <td><strong>${{ "%.2f"|format(order.total_amount - 5.99) }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><strong>Delivery Fee:</strong></td>
+                                    <td><strong>$5.99</strong></td>
+                                </tr>
+                                <tr class="table-success">
+                                    <td colspan="3"><strong>Total Amount:</strong></td>
+                                    <td><strong class="price">${{ "%.2f"|format(order.total_amount) }}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-clock fa-2x mb-3" style="color: var(--secondary-color);"></i>
+                            <h5>What's Next?</h5>
+                            <p class="text-muted">We'll start preparing your order and send you updates via email. Your pastries will be delivered fresh on your selected date.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-envelope fa-2x mb-3" style="color: var(--secondary-color);"></i>
+                            <h5>Stay Updated</h5>
+                            <p class="text-muted">You'll receive email confirmations and tracking information. Contact us at orders@sweetdelights.com if you have any questions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/browse" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-shopping-bag"></i> Order More Pastries
+                </a>
+                <a href="/" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-home"></i> Return Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
