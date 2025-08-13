@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
@@ -28,14 +28,14 @@ class Pastry(db.Model):
     image_url = db.Column(db.String(200))
     category = db.Column(db.String(50))
     available = db.Column(db.Boolean, default=True)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.UTC))  # Fixed deprecation warning
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  # Fixed deprecation warning
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     phone = db.Column(db.String(20))
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.UTC))  # Fixed deprecation warning
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  # Fixed deprecation warning
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,7 +49,7 @@ class Order(db.Model):
     status = db.Column(db.String(20), default='pending')
     payment_status = db.Column(db.String(20), default='pending')
     special_instructions = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(datetime.UTC))  # Fixed deprecation warning
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  # Fixed deprecation warning
     
     customer = db.relationship('Customer', backref=db.backref('orders', lazy=True))
 
