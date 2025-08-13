@@ -35,3 +35,14 @@ def test_pastry_creation(app):
         
         assert Pastry.query.count() == 1
         assert Pastry.query.first().name == 'Croissant'
+
+
+def test_index_page(client):
+    """Test the home page returns 200 OK"""
+    response = client.get('/')
+    assert response.status_code == 200
+
+def test_browse_page(client):
+    """Test the browse page returns 200 OK"""
+    response = client.get('/browse')
+    assert response.status_code == 200

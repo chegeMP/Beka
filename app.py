@@ -303,3 +303,35 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     app.run()
+
+
+
+
+
+
+def create_app(test_config=None):
+    """Application factory pattern for testing"""
+    app = Flask(__name__)
+    
+    # Use test config if provided, otherwise use your normal config
+    if test_config:
+        app.config.update(test_config)
+    else:
+        # Your existing configuration
+        app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback-secret-key-change-in-production')
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://postgres:lifeisgood@localhost/pastry_db')
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        # ... [keep all your other config settings]
+    
+    # Initialize extensions
+    db.init_app(app)
+    migrate.init_app(app, db)
+    
+    return app
+
+# Create the app instance
+app = create_app()
+
+if __name__ == '__main__':
+    debug_mode = os.getenv('FLASK_DEBUG', 'True').lower() == 'true'
+    app.run(debug=debug_mode, host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
