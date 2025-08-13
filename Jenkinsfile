@@ -47,11 +47,10 @@ pipeline {
                 '''
             }
             post {
-                always {
-                    // Publish test results
-                    publishTestResults testResultsPattern: 'test-results.xml'
-                }
-            }
+    always {
+        junit 'test-results.xml'  // Publishes JUnit test results
+    }
+}
         }
         
         stage('Code Coverage') {
