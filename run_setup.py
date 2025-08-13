@@ -12,7 +12,7 @@ from datetime import datetime
 # Create Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:lifeisgood@localhost/pastry_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:lifeisgood@db/pastry_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize SQLAlchemy
