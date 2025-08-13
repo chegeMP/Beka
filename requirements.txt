@@ -5,3 +5,5 @@ psycopg2-binary==2.9.7
 Werkzeug==2.3.7
 python-dotenv==1.0.0
 uuid==1.30
+pytest==8.4.1
+pytest-cov==4.1.0
