@@ -1,5 +1,5 @@
 import pytest
-from app import create_app  # Update with your actual app creation function
+from app import create_app  
 
 @pytest.fixture
 def client():
