@@ -6,6 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV DATABASE_URL="postgresql://postgres:lifeisgood@db:5432/pastry_db"
 
 # Set work directory
 WORKDIR /app
@@ -31,6 +32,8 @@ RUN pip install --upgrade pip \
 
 # Copy application code
 COPY . .
+
+COPY .env .env
 
 # Create necessary directories
 RUN mkdir -p static/uploads logs \
