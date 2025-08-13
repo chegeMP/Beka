@@ -26,6 +26,11 @@ def test_index_page(client):
     response = client.get('/')
     assert response.status_code == 200
 
+def test_browse_page(client):
+    """Test the browse page returns 200 OK"""
+    response = client.get('/browse')
+    assert response.status_code == 200
+
 def test_pastry_creation(app):
     """Test pastry creation"""
     with app.app_context():
@@ -36,13 +41,19 @@ def test_pastry_creation(app):
         assert Pastry.query.count() == 1
         assert Pastry.query.first().name == 'Croissant'
 
+def test_api_pastries(client):
+    """Test the API endpoint returns JSON"""
+    response = client.get('/api/pastries')
+    assert response.status_code == 200
+    assert response.is_json
 
-def test_index_page(client):
-    """Test the home page returns 200 OK"""
-    response = client.get('/')
+def test_cart_empty(client):
+    """Test empty cart page"""
+    response = client.get('/cart')
     assert response.status_code == 200
 
-def test_browse_page(client):
-    """Test the browse page returns 200 OK"""
-    response = client.get('/browse')
-    assert response.status_code == 200
+def test_checkout_empty_cart(client):
+    """Test checkout with empty cart redirects"""
+    response = client.get('/checkout')
+    # Should redirect to browse page when cart is empty
+    assert response.status_code == 302
