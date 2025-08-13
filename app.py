@@ -75,6 +75,8 @@ class OrderItem(db.Model):
     order = db.relationship('Order', backref=db.backref('items', lazy=True))
     pastry = db.relationship('Pastry', backref=db.backref('order_items', lazy=True))
 
+    
+
 # Routes
 @app.route('/')
 def index():
@@ -286,6 +288,9 @@ def create_tables():
         db.create_all()
         print("Database tables created successfully!")
 
+
+
+
 # Call create_tables when this module is imported
 with app.app_context():
     db.create_all()
@@ -293,3 +298,8 @@ with app.app_context():
 if __name__ == '__main__':
     debug_mode = os.getenv('FLASK_DEBUG', 'True').lower() == 'true'
     app.run(debug=debug_mode, host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
+
+
+
+if __name__ == '__main__':
+    app.run()
