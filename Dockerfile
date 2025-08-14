@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
-ENV DATABASE_URL="postgresql://postgres:lifeisgood@localhost:5432/pastry_db"
+ENV DATABASE_URL="postgresql://postgres:lifeisgood@localhost:5433/pastry_db"
 
 # Set work directory
 WORKDIR /app

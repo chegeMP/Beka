@@ -14,7 +14,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/
     ports:
-      - "5432:5432"
+      - "5433:5433"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-pastry_db}"]
       interval: 30s
@@ -48,7 +48,7 @@ services:
     container_name: pastry_app
     restart: unless-stopped
     environment:
-      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-lifeisgood}@db:5432/${DB_NAME:-pastry_db}
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-lifeisgood}@db:5433/${DB_NAME:-pastry_db}
       - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}
       - FLASK_ENV=${FLASK_ENV:-production}
       - FLASK_DEBUG=${FLASK_DEBUG:-False}
@@ -78,7 +78,7 @@ services:
       dockerfile: Dockerfile
     container_name: pastry_db_init
     environment:
-      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-lifeisgood}@db:5432/${DB_NAME:-pastry_db}
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-lifeisgood}@db:5433/${DB_NAME:-pastry_db}
     depends_on:
       db:
         condition: service_healthy
