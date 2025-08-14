@@ -73,7 +73,7 @@ def create_app(test_config=None):
     else:
         # Configuration from environment variables
         app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback-secret-key-change-in-production')
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://postgres:lifeisgood@db:5432/pastry_db')
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://postgres:lifeisgood@localhost:5432/pastry_db')
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         
         # Additional configuration
