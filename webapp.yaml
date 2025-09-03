@@ -1,46 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-deployment
+  name: webapp-deployment
   labels:
-    app: postgres
+    app: webapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: webapp
   template:
     metadata:
       labels:
-        app: postgres
+        app: webapp
     spec:
       containers:
-      - name: postgresql
-        image: postgres:13.22-trixie
+      - name: webapp 
+        image: chegehmark/beka_web:latest
         ports:
-        - containerPort: 5432
+        - containerPort: 5000
         env:
-        - name: POSTGRES_USER
+        - name: USER_NAME
           valueFrom:
             secretKeyRef:
               name: postgres-secret
               key: USERNAME
-        - name: POSTGRES_PASSWORD
+        - name: PASSWORD
           valueFrom:
             secretKeyRef:
               name: postgres-secret
               key: PASSWORD
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: postgres-service
-spec:
-  selector:
-    app: postgres   
-  ports:
-    - protocol: TCP
-      port: 5432
-      targetPort: 5432
+        - name: HOST
+          value: "postgres-service"
+        - name: DB_NAME
+          value: "postgres"   # or "pastry_db" if that’s what you actually want

@@ -73,7 +73,17 @@ def create_app(test_config=None):
     else:
         # Configuration from environment variables
         app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'fallback-secret-key-change-in-production')
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://postgres:lifeisgood@localhost:5433/pastry_db')
+        
+        # --- Database Config ---
+        database_url = os.getenv('DATABASE_URL')
+        if not database_url:
+            user = os.getenv("USER_NAME", "postgres")
+            password = os.getenv("PASSWORD", "lifeisgood")
+            host = os.getenv("HOST", "localhost")
+            db_name = os.getenv("DB_NAME", "pastry_db")
+            database_url = f"postgresql://{user}:{password}@{host}:5432/{db_name}"
+        
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         
         # Additional configuration
@@ -94,6 +104,7 @@ def create_app(test_config=None):
         db.create_all()
     
     return app
+
 
 def register_routes(app):
     """Register all routes with the Flask app"""
